@@ -22,14 +22,6 @@
     "keycaps": "VileBloom",
     "ffactor": "50%",
     "switches": "BOBA Gum"
-  },
-  {
-    "id": 3,
-    "name": "Bar",
-    "picture": "images/CandyBar.png",
-    "keycaps": "Vile",
-    "ffactor": "55%",
-    "switches": "BOBA man"
   }
 
 ]
