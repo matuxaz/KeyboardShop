@@ -15,14 +15,13 @@ App = {
         petTemplate.find('.switches').text(data[i].switches);
         petTemplate.find('.keycaps').text(data[i].keycaps);
         petTemplate.find('.ffactor').text(data[i].ffactor);
-        //artTemplate.find('.owner').attr('data-id', data[i].id);
         petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
 
         petsRow.append(petTemplate.html());
       }
       for (i = 0; i < adopters.length; i++) {
         if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-          $(document).find('.owner').eq(i).text(`${adopters[i]}`);
+          petTemplate.find('.owner').text(adopters[i]);
         }
       }
 
@@ -95,7 +94,6 @@ App.contracts.kbCrud.deployed().then(function(instance) {
   for (i = 0; i < owners.length; i++) {
     if (owners[i] !== '0x0000000000000000000000000000000000000000') {
       $('.panel-pet').eq(i).find('button').text('Unavailable').attr('disabled', true);
-      $(document).find('.owner').eq(j).text(`${adopters[i]}`);
     }
   }
 }).catch(function(err) {
