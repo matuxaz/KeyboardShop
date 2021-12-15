@@ -22,6 +22,14 @@
     "keycaps": "VileBloom",
     "ffactor": "50%",
     "switches": "BOBA Gum"
+  },
+  {
+    "id": 3,
+    "name": "Halo",
+    "picture": "images/CandyBar.png",
+    "keycaps": "Halo",
+    "ffactor": "96%",
+    "switches": "Gateron Yellow"
   }
 
 ]
