@@ -20,11 +20,6 @@ App = {
 
         petsRow.append(petTemplate.html());
       }
-      for (i = 0; i < adopters.length; i++) {
-        if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-          petTemplate.find('.owner').text(adopters[i]);
-        }
-      }
     });
 
     return await App.initWeb3();
@@ -64,6 +59,7 @@ web3 = new Web3(App.web3Provider);
       // Set the provider for our contract
       App.contracts.Adoption.setProvider(App.web3Provider);
 
+      // Set up the accounts
       web3.eth.getCoinbase(function(err, account) {
         if (err === null) {
           App.account = account;
@@ -90,11 +86,11 @@ App.contracts.Adoption.deployed().then(function(instance) {
   adoptionInstance = instance;
 
   return adoptionInstance.getAdopters.call();
-}).then(function(adopters) {
-  for (i = 0; i < adopters.length; i++) {
-    if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
+}).then(function(owners) {
+  for (i = 0; i < owners.length; i++) {
+    if (owners[i] !== '0x0000000000000000000000000000000000000000') {
       $('.panel-pet').eq(i).find('button').text('Unavailable').attr('disabled', true);
-      $(document).find('.owner').eq(i).text(`${adopters[i]}`);
+      $(document).find('.owner').eq(i).text(`${owners[i]}`);
     }
   }
 }).catch(function(err) {

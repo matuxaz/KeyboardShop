@@ -10,10 +10,9 @@ contract Adoption {
     string ffactor;
     string switches;
   }
-uint public keyboardCount = 0;
+uint public constant keyboardCount = 4;
 uint public keyboardId = 0;
-uint[] public arrayForItems;
-address[16] public adopters;
+uint[keyboardCount] public arrayForItems;
 
 mapping(uint => Item) public keyboards;
 mapping(uint => address) public owners;
@@ -29,21 +28,26 @@ function add(string memory name, string memory picture, string memory keycaps, s
   keyboards[keyboardId] = Item(name, picture, keycaps, ffactor, switches);
   owners[keyboardId] = address(0);
   keyboardId++;
-  keyboardCount++;
 }
 
 // Adopting a pet
 function adopt(uint petId) public returns (uint) {
   require(petId >= 0 && petId <= keyboardCount);
 
-  adopters[petId] = msg.sender;
+  owners[petId] = msg.sender;
 
   return petId;
 }
 
 // Retrieving the adopters
-function getAdopters() public view returns (address[16] memory) {
-  return adopters;
+function getAdopters() public view returns (address[keyboardCount] memory) {
+  address[keyboardCount] memory arrayOfOwners;
+
+  for (uint i=0;i < keyboardCount; i++) {
+			arrayOfOwners[i] = owners[i];
+		}
+
+  return arrayOfOwners;
 }
 
 }
