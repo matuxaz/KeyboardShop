@@ -2,6 +2,17 @@
 pragma solidity 0.8.10;
 
 contract Adoption {
+
+  struct Item{
+    uint id;
+    string name;
+    string picture;
+    string keycaps;
+    string ffactor;
+    string switches;
+    address[16] owner;
+  }
+
 address[16] public adopters;
 
 // Adopting a pet
