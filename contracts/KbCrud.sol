@@ -10,19 +10,20 @@ struct keyboard{
     string ffactor;
     string switches;
 }
-uint public totalKeyboards = 3;
+uint constant totalKeyboards = 4;
 uint public itemId = 0;
 
-uint[3] public keyboardArray;
+uint[totalKeyboards] public keyboardArray;
 
 //hash tables for keyboards and ownership
 mapping(uint => keyboard) public keyboards;
 mapping(uint => address) public owners;
 
-constructor() public{
+constructor(){
     insert("ID80", "images/ID80.png", "laser", "75%", "BOBA U4t");
     insert("The Classic", "images/Classic.png", "Botanical", "65%", "Cherry MX Brown");
     insert("Candy Bar", "images/CandyBar.png", "VileBloom", "50%", "BOBA Gum");
+    insert("Bar", "images/CandyBar.png", "Vile", "55%", "BOBA man");
 }
 
 event NewKeyboard(string name, string picture, string keycaps, string ffactor, string switches);
@@ -49,12 +50,6 @@ function update(uint id, string memory newName, string memory newPicture, string
             keyboards[id].switches = newSwitches;
             emit SpecsUpdated(newName, newPicture, newKeycaps, newFfactor, newSwitches);
 }
-function deleteKeyboard(uint id) public{
-            keyboards[id] = keyboards[totalKeyboards-1]; //pushing last keyboard into current array and deleting it
-            delete keyboards[totalKeyboards-1];
-            totalKeyboards--;
-            emit KeyboardDelete(keyboards[id].name);
-    }
 function getKeyboard(uint id) public view returns(string memory name, string memory picture, string memory keycaps, string  memory ffactor, string memory switches){
     require(id >= 0 && id < totalKeyboards, "Item does not exist");
     return (keyboards[id].name, keyboards[id].picture, keyboards[id].keycaps, keyboards[id].ffactor, keyboards[id].switches);
@@ -101,6 +96,21 @@ function checkOwner (uint _itemId, address person_wallet) public view returns (b
 		} else {
 			return true;
 		}
+	}
+
+function getKeyboardCount () public pure returns (uint) {
+		return totalKeyboards;
+	}
+
+function getOwners() public view returns (address[totalKeyboards] memory) {
+		address[totalKeyboards] memory arrayOfOwners;
+
+		for (uint i=0;i < totalKeyboards; i++) {
+			arrayOfOwners[i] = owners[i];
+		}
+
+		return arrayOfOwners;
+
 	}
 
 }

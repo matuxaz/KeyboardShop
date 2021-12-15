@@ -57,13 +57,13 @@ web3 = new Web3(App.web3Provider);
   },
 
   initContract: function() {
-    $.getJSON('Adoption.json', function(data) {
+    $.getJSON('KbCrud.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with @truffle/contract
-      var AdoptionArtifact = data;
-      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
+      var KbArtifact = data;
+      App.contracts.KbCrud = TruffleContract(KbArtifact);
     
       // Set the provider for our contract
-      App.contracts.Adoption.setProvider(App.web3Provider);
+      App.contracts.KbCrud.setProvider(App.web3Provider);
 
       web3.eth.getCoinbase(function(err, account) {
         if (err === null) {
@@ -85,15 +85,15 @@ web3 = new Web3(App.web3Provider);
 
   //making the buy buttons unclickable for already bought items
   markAdopted: function() {
-    var adoptionInstance;
+    var kbInstance;
 
-App.contracts.Adoption.deployed().then(function(instance) {
-  adoptionInstance = instance;
+App.contracts.kbCrud.deployed().then(function(instance) {
+  kbInstance = instance;
 
-  return adoptionInstance.getAdopters.call();
-}).then(function(adopters) {
-  for (i = 0; i < adopters.length; i++) {
-    if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
+  return kbInstance.getOwners.call();
+}).then(function(owners) {
+  for (i = 0; i < owners.length; i++) {
+    if (owners[i] !== '0x0000000000000000000000000000000000000000') {
       $('.panel-pet').eq(i).find('button').text('Unavailable').attr('disabled', true);
       $(document).find('.owner').eq(j).text(`${adopters[i]}`);
     }
@@ -106,9 +106,9 @@ App.contracts.Adoption.deployed().then(function(instance) {
   handleAdopt: function(event) {
     event.preventDefault();
 
-    var petId = parseInt($(event.target).data('id'));
+    var kbId = parseInt($(event.target).data('id'));
 
-    var adoptionInstance;
+    var kbInstance;
 
 web3.eth.getAccounts(function(error, accounts) {
   if (error) {
@@ -117,11 +117,11 @@ web3.eth.getAccounts(function(error, accounts) {
 
   var account = accounts[0];
 
-  App.contracts.Adoption.deployed().then(function(instance) {
-    adoptionInstance = instance;
+  App.contracts.KbCrud.deployed().then(function(instance) {
+    kbInstance = instance;
 
     // Execute adopt as a transaction by sending account
-    return adoptionInstance.adopt(petId, {from: account});
+    return kbInstance.BuyKeyboard(kbId, {from: account});
   }).then(function(result) {
     return App.markAdopted();
   }).catch(function(err) {
