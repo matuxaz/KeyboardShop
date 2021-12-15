@@ -15,13 +15,14 @@ App = {
         petTemplate.find('.switches').text(data[i].switches);
         petTemplate.find('.keycaps').text(data[i].keycaps);
         petTemplate.find('.ffactor').text(data[i].ffactor);
+        //artTemplate.find('.owner').attr('data-id', data[i].id);
         petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
 
         petsRow.append(petTemplate.html());
       }
       for (i = 0; i < adopters.length; i++) {
         if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-          petTemplate.find('.owner').text(adopters[i]);
+          $(document).find('.owner').eq(i).text(`${adopters[i]}`);
         }
       }
 
@@ -94,6 +95,7 @@ App.contracts.Adoption.deployed().then(function(instance) {
   for (i = 0; i < adopters.length; i++) {
     if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
       $('.panel-pet').eq(i).find('button').text('Unavailable').attr('disabled', true);
+      $(document).find('.owner').eq(j).text(`${adopters[i]}`);
     }
   }
 }).catch(function(err) {

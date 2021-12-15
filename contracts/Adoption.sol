@@ -5,12 +5,11 @@ contract Adoption {
 address[16] public adopters;
 
 // Adopting a pet
-function adopt(uint petId) public returns (uint) {
-  require(petId >= 0 && petId <= 15);
+function adopt(uint itemId) public returns (uint) {
 
-  adopters[petId] = msg.sender;
+  adopters[itemId] = msg.sender;
 
-  return petId;
+  return itemId;
 }
 
 // Retrieving the adopters
