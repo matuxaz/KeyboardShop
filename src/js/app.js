@@ -5,7 +5,7 @@ App = {
   init: async function() {
 
     // Load pets.
-    $.getJSON('../pets.json', function(data) {
+    $.getJSON('../keyboards.json', function(data) {
       var petsRow = $('#petsRow');
       var petTemplate = $('#petTemplate');
 
@@ -19,6 +19,12 @@ App = {
 
         petsRow.append(petTemplate.html());
       }
+      for (i = 0; i < adopters.length; i++) {
+        if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
+          petTemplate.find('.owner').text(adopters[i]);
+        }
+      }
+
     });
 
     return await App.initWeb3();
@@ -57,7 +63,13 @@ web3 = new Web3(App.web3Provider);
     
       // Set the provider for our contract
       App.contracts.Adoption.setProvider(App.web3Provider);
-    
+
+      web3.eth.getCoinbase(function(err, account) {
+        if (err === null) {
+          App.account = account;
+          $("#account").text(account);
+        }
+      })
       // Use our contract to retrieve and mark the adopted pets
       return App.markAdopted();
     });
@@ -65,6 +77,7 @@ web3 = new Web3(App.web3Provider);
     return App.bindEvents();
   },
 
+  //binding the buy button to the handler function
   bindEvents: function() {
     $(document).on('click', '.btn-adopt', App.handleAdopt);
   },
@@ -80,7 +93,7 @@ App.contracts.Adoption.deployed().then(function(instance) {
 }).then(function(adopters) {
   for (i = 0; i < adopters.length; i++) {
     if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-      $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
+      $('.panel-pet').eq(i).find('button').text('Unavailable').attr('disabled', true);
     }
   }
 }).catch(function(err) {
