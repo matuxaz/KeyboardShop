@@ -20,24 +20,12 @@ App = {
 
         petsRow.append(petTemplate.html());
       }
-      for (i = 0; i < owners.length; i++) {
-        if (owners[i] !== '0x0000000000000000000000000000000000000000') {
-          petTemplate.find('.owner').text(owners[i]);
+      for (i = 0; i < adopters.length; i++) {
+        if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
+          petTemplate.find('.owner').text(adopters[i]);
         }
       }
     });
-
-    for(i = 0; i < keyboardCount; i++){
-      petTemplate.find('.panel-title').text(data[i].name);
-        petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.switches').text(data[i].switches);
-        petTemplate.find('.keycaps').text(data[i].keycaps);
-        petTemplate.find('.ffactor').text(data[i].ffactor);
-        petTemplate.find('.id').text(data[i].id);
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
-
-        petsRow.append(petTemplate.html());
-    }
 
     return await App.initWeb3();
   },
@@ -101,12 +89,12 @@ web3 = new Web3(App.web3Provider);
 App.contracts.Adoption.deployed().then(function(instance) {
   adoptionInstance = instance;
 
-  return adoptionInstance.getOwners.call();
-}).then(function(owners) {
-  for (i = 0; i < owners.length; i++) {
-    if (owners[i] !== '0x0000000000000000000000000000000000000000') {
+  return adoptionInstance.getAdopters.call();
+}).then(function(adopters) {
+  for (i = 0; i < adopters.length; i++) {
+    if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
       $('.panel-pet').eq(i).find('button').text('Unavailable').attr('disabled', true);
-      $(document).find('.owner').eq(i).text(`${owners[i]}`);
+      $(document).find('.owner').eq(i).text(`${adopters[i]}`);
     }
   }
 }).catch(function(err) {
@@ -117,7 +105,7 @@ App.contracts.Adoption.deployed().then(function(instance) {
   handleAdopt: function(event) {
     event.preventDefault();
 
-    var itemId = parseInt($(event.target).data('id'));
+    var petId = parseInt($(event.target).data('id'));
 
     var adoptionInstance;
 
@@ -132,7 +120,7 @@ web3.eth.getAccounts(function(error, accounts) {
     adoptionInstance = instance;
 
     // Execute adopt as a transaction by sending account
-    return adoptionInstance.buy(itemId, {from: account});
+    return adoptionInstance.adopt(petId, {from: account});
   }).then(function(result) {
     return App.markAdopted();
   }).catch(function(err) {
