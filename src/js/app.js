@@ -74,7 +74,11 @@ web3 = new Web3(App.web3Provider);
       count = keyboards.c[0]
 
       var petsRow = $('#petsRow');
-    var petTemplate = $('#petTemplate');
+      var petTemplate = $('#petTemplate');
+
+      var userRow = $('#userRow');
+      var userTemplate = $('#userTemplate');
+      
 
       for (i = 0; i < count; i++) {
         adoptionInstance.get.call(i).then(function(keyboard) {
@@ -88,18 +92,41 @@ web3 = new Web3(App.web3Provider);
         const uploader = keyboard[5];
         const owner = keyboard[6];
 
+        const currentUser = App.web3Provider.selectedAddress;
+
         petTemplate.find('.panel-title').text(name);
-        petTemplate.find('img').attr('src', picture);
         petTemplate.find('.switches').text(switches);
         petTemplate.find('.id').text(id);
         petTemplate.find('.price').text(price);
         petTemplate.find('.btn-adopt').attr('data-price', price);
         petTemplate.find('.uploader').text(uploader);
         petTemplate.find('.owner').text(owner);
+
+        //checking if image exists
+        var http = new XMLHttpRequest();
+        http.open('HEAD', picture, false);
+        http.send();
+        if (http.status != 404)
+          petTemplate.find('img').attr('src', picture);
+        else
+          petTemplate.find('img').attr('src', 'images/notUploaded.png');
         
         if(owner !== '0x0000000000000000000000000000000000000000'){
           petTemplate.find('.btn-adopt').text('Unavailable').attr('disabled', true);
         } else petTemplate.find('.btn-adopt').text('Buy').attr('data-id', id).attr('disabled', false);
+        console.log(currentUser);
+        console.log(owner);
+
+        //populating the userPage
+        if (owner === currentUser) {
+        userTemplate.find('.user-panel-title').text(name);
+        userTemplate.find('.user-switches').text(switches);
+        userTemplate.find('.user-id').text(id);
+        userTemplate.find('.user-price').text(id);
+        userTemplate.find('.user-uploader').text(uploader);
+
+        userRow.append(userTemplate.html());
+        }
 
         petsRow.append(petTemplate.html());
           
@@ -120,10 +147,6 @@ web3 = new Web3(App.web3Provider);
     var switches = $('#switches').val();
     var price = $('#price').val();
     var picture = $('#picture').val();
-    console.log(name);
-    console.log(switches);
-    console.log(price);
-    console.log(picture);
     
     var adoptionInstance;
     web3.eth.getAccounts(function(error, accounts) {
@@ -142,6 +165,10 @@ web3 = new Web3(App.web3Provider);
         console.log(result);
         console.log("Keyboard added");
         location.reload();
+        console.log(name);
+        console.log(switches);
+        console.log(price);
+        console.log(picture);
       }).catch(function(err) {
         console.log(err.message);
       });

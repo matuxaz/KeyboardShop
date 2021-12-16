@@ -21,9 +21,9 @@
       <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-sm-push-2">
-          <h1 class="text-center">Add a BlockChain keyboard
+          <h1 class="text-center">Your bought keyboards
             <div>
-              <button class="btn btn-success ml-auto mr-1 account-button" onclick="window.location.href='userPage.html'">Account: <span class="nav-link" id="account"></span></button>
+              <button class="btn btn-success ml-auto mr-1 account-button">Account: <span class="nav-link" id="account"></span></button>
               <button onclick="window.location.href='index.html'" class="btn ml-auto mr-1 account-button">Back to shop<span class="nav-link" id="back"></span></button>
             </div>
             
@@ -34,28 +34,32 @@
         </div>
       </div>
 
-      <div class="card col-6 mx-auto">
-      <div class="card-header">
-        Upload a  keyboard:
-      </div>
-      <div class="card-body">
-        <div class="input-group">
-          <input type="text" class="form-control" id="name" name="name" placeholder="Input name">
-        </div>
-          <div class="input-group">
-            <input type="text" class="form-control" id="switches" name="switches" placeholder="Input switches">
-          </div>
-          <div class="input-group">
-            <input type="number" class="form-control" id="price" name="price" placeholder="Input price">
-          </div>
-          <div class="input-group">
-            <input type="text" class="form-control" id="picture" name="picture" placeholder="Input picture">
-          </div>
-          
-
-          <button class="button button-primary" id="btn-add-keyboard">Create</button>
+      <div id="userRow" class="row">
+        <!-- USER KEYBOARDS LOAD HERE -->
       </div>
     </div>
+      
+      <div id="userTemplate" style="display: none;">
+        <div class="col-sm-6 col-md-5 col-lg-4">
+          <div class="panel panel-default panel-pet">
+            <div class="panel-heading">
+              <h3 class="user-panel-title">No name</h3>
+            </div>
+            <div class="panel-body">
+              <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://animalso.com/wp-content/uploads/2017/01/Golden-Retriever_6.jpg" data-holder-rendered="true">
+              <br/><br/>
+              <strong>Switches</strong>: <span class="user-switches">3</span><br/>
+              <strong>ID</strong>: <span class="user-id">0</span><br/>
+              <strong>Price</strong>: <span class="user-price">3</span><br/>
+              <strong>Uploaded by:</strong>: <span class="user-uploader">0x0000000000000000000000000000000000000000</span><br/>
+            
+              <button style="background-color: #FFD7D7;" class="btn btn-default user-btn-delete" type="button" user-data-id="0">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
     
 
