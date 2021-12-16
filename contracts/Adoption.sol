@@ -63,6 +63,16 @@ function deleteKeyboard(uint id) public{
   }
 }
 
+function sellKeyboard(uint id) public{
+  for(uint i = 0; i < keyboards.length; i++){
+    if(keyboards[i].owner == msg.sender && keyboards[i].id == id){
+      keyboards[i].uploader = keyboards[i].owner;
+      keyboards[i].owner = address(0);
+      return;
+    }
+  }
+}
+
 function editKeyboard(uint id, string memory name, string memory switches, uint price, string memory picture) public{
   for(uint i = 0; i < keyboards.length; i++){
     if(keyboards[i].owner == msg.sender && keyboards[i].id == id){

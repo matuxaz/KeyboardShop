@@ -201,7 +201,7 @@ web3 = new Web3(App.web3Provider);
         return adoptionInstance.editKeyboard(kbId, name, switches, price, picture, {from: account});
 
       }).then(function(result) {
-        console.log("Keyboard added");
+        console.log("Keyboard data edited");
         location.reload();
 
       }).catch(function(err) {
@@ -231,6 +231,34 @@ web3 = new Web3(App.web3Provider);
 
       }).then(function(result) {
         console.log("keyboard deleted with id:", kbId);
+        location.reload();
+
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  handleSell: function(event){
+    event.preventDefault();
+    var kbId = parseInt($(event.target).data('id'));
+
+    var adoptionInstance;
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      console.log(account);
+
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
+
+        return adoptionInstance.sellKeyboard(kbId, {from: account});
+
+      }).then(function(result) {
+        console.log("Keyboard placed on sale:", kbId);
         location.reload();
 
       }).catch(function(err) {
@@ -269,6 +297,8 @@ web3.eth.getAccounts(function(error, accounts) {
   });
 });
   }
+
+
 };
 
 $(function() {
