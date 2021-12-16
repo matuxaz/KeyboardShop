@@ -60,6 +60,7 @@ web3 = new Web3(App.web3Provider);
   bindEvents: function() {
     $(document).on('click', '.btn-adopt', App.handleBuy);
     $(document).on('click', '.btn-delete', App.handleDelete);
+    $(document).on('click', '.btn-edit', App.handleEdit);
     $(document).on('click', '#btn-add-keyboard', App.handleCreate);
   },
 
@@ -113,7 +114,7 @@ web3 = new Web3(App.web3Provider);
           else
             petTemplate.find('img').attr('src', 'images/notUploaded.png');
           
-          if(owner !== '0x0000000000000000000000000000000000000000'){
+          if(owner !== '0x0000000000000000000000000000000000000000' || uploader == currentUser){
             petTemplate.find('.btn-adopt').text('Unavailable').attr('disabled', true);
           } else petTemplate.find('.btn-adopt').text('Buy').attr('data-id', id).attr('disabled', false);
   
@@ -125,6 +126,7 @@ web3 = new Web3(App.web3Provider);
           userTemplate.find('.user-price').text(id);
           userTemplate.find('.user-uploader').text(uploader);
           userTemplate.find('.btn-delete').attr('data-id', id);
+          userTemplate.find('.btn-edit').attr('data-id', id);
   
           userRow.append(userTemplate.html());
           }
@@ -173,6 +175,13 @@ web3 = new Web3(App.web3Provider);
         console.log(err.message);
       });
     });
+  },
+
+  handleEdit: function(event){
+    event.preventDefault();
+    var kbId = parseInt($(event.target).data('id'));
+    console.log("Trying to change values for", kbId);
+
   },
 
   handleDelete: function(event){
