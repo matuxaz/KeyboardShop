@@ -33,20 +33,30 @@
           <br/>
         </div>
       </div>
-      <div class="row">
-        <form>
-          <label for="name">Keyboard name:</label><br>
-          <input type="text" id="name" name="name"><br>
-          <label for="switches">Switches:</label><br>
-          <input type="text" id="switches" name="switches"><br>
-          <label for="price">Price:</label><br>
-          <input type="number" id="price" name="price"><br><br>
-          <input type="file" id="picture" name="picture" accept = "image/*"><br>
-          <input type="submit" value="Submit"><br>
-        </form>
-        </form>
+
+      <div class="card col-6 mx-auto">
+      <div class="card-header">
+        Upload a  keyboard:
+      </div>
+      <div class="card-body">
+        <div class="input-group">
+          <input type="text" class="form-control" id="name" name="name" placeholder="Input name">
+        </div>
+          <div class="input-group">
+            <input type="text" class="form-control" id="switches" name="switches" placeholder="Input switches">
+          </div>
+          <div class="input-group">
+            <input type="number" class="form-control" id="price" name="price" placeholder="Input price">
+          </div>
+          <div class="input-group">
+            <input type="text" class="form-control" id="picture" name="picture" placeholder="Input picture">
+          </div>
+
+          <button class="button button-primary" id="btn-add-keyboard">Create</button>
       </div>
     </div>
+    </div>
+    
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

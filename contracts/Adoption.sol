@@ -22,7 +22,7 @@ constructor(){
   add("Halo","","Gateron Yellow", 5);
 }
 
-function add(string memory name, string memory picture, string memory switches, uint price) private{
+function add(string memory name, string memory picture, string memory switches, uint price) public{
   if(keccak256(bytes(picture)) == keccak256(bytes(""))){
     keyboards.push(Item(keyboardId, name, "images/notUploaded.png", switches, price, msg.sender, address(0)));
   }else{

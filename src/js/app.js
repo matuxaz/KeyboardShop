@@ -59,6 +59,7 @@ web3 = new Web3(App.web3Provider);
   //binding the buy button to the handler function
   bindEvents: function() {
     $(document).on('click', '.btn-adopt', App.handleBuy);
+    $(document).on('click', '#btn-add-keyboard', App.handleCreate);
   },
 
   showListings: function() {
@@ -112,8 +113,39 @@ web3 = new Web3(App.web3Provider);
     });
   },
 
-  handleCreate: function(){
+  handleCreate: function(event){
+    event.preventDefault();
+    console.log("Creating new keyboard");
+    var name = $('#name').val();
+    var switches = $('#switches').val();
+    var price = $('#price').val();
+    var picture = $('#picture').val();
+    console.log(name);
+    console.log(switches);
+    console.log(price);
+    console.log(picture);
+    
+    var adoptionInstance;
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
 
+      var account = accounts[0];
+      console.log(account);
+
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
+
+        return adoptionInstance.add(name, picture, switches, price, {from: account});
+      }).then(function(result) {
+        console.log(result);
+        console.log("Keyboard added");
+        location.reload();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
   },
 
   handleBuy: function(event) {
