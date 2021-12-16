@@ -112,7 +112,9 @@ web3 = new Web3(App.web3Provider);
     });
   },
 
-  //making the buy buttons unclickable for already bought items
+  handleCreate: function(){
+
+  },
 
   handleBuy: function(event) {
     event.preventDefault();

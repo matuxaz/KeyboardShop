@@ -16,14 +16,19 @@ uint public keyboardId = 0;
 Item[] public keyboards;
 
 constructor(){
-  add("ID80","images/ID80.png","BOBA U4T", 2);
-  add("The Classic","images/Classic.png", "Cherry MX Brown", 3);
-  add("Candy Bar","images/CandyBar.png", "BOBA Gum", 4);
-  add("Halo","images/CandyBar.png","Gateron Yellow", 5);
+  add("ID80","ID80.png","BOBA U4T", 2);
+  add("The Classic","Classic.png", "Cherry MX Brown", 3);
+  add("Candy Bar","CandyBar.png", "BOBA Gum", 4);
+  add("Halo","","Gateron Yellow", 5);
 }
 
 function add(string memory name, string memory picture, string memory switches, uint price) private{
-  keyboards.push(Item(keyboardId, name, picture, switches, price, msg.sender, address(0)));
+  if(keccak256(bytes(picture)) == keccak256(bytes(""))){
+    keyboards.push(Item(keyboardId, name, "images/notUploaded.png", switches, price, msg.sender, address(0)));
+  }else{
+    string memory fullString = string(abi.encodePacked("images/", picture));
+    keyboards.push(Item(keyboardId, name, fullString, switches, price, msg.sender, address(0)));
+  }
   keyboardId++;
 }
 
