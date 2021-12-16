@@ -58,7 +58,7 @@ web3 = new Web3(App.web3Provider);
 
   //binding the buy button to the handler function
   bindEvents: function() {
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
+    $(document).on('click', '.btn-adopt', App.handleBuy);
   },
 
   showListings: function() {
@@ -92,6 +92,7 @@ web3 = new Web3(App.web3Provider);
         petTemplate.find('.switches').text(switches);
         petTemplate.find('.id').text(id);
         petTemplate.find('.price').text(price);
+        petTemplate.find('.btn-adopt').attr('data-price', price);
         petTemplate.find('.uploader').text(uploader);
         petTemplate.find('.owner').text(owner);
 
@@ -113,10 +114,12 @@ web3 = new Web3(App.web3Provider);
 
   //making the buy buttons unclickable for already bought items
 
-  handleAdopt: function(event) {
+  handleBuy: function(event) {
     event.preventDefault();
 
-    var petId = parseInt($(event.target).data('id'));
+    var kbId = parseInt($(event.target).data('id'));
+    var kbPrice = parseInt($(event.target).data('price'));
+    console.log("buying keyboard with id and price: " + kbId + ", " + kbPrice);
 
     var adoptionInstance;
 
@@ -131,15 +134,16 @@ web3.eth.getAccounts(function(error, accounts) {
     adoptionInstance = instance;
 
     // Execute adopt as a transaction by sending account
-    return adoptionInstance.buy(petId, {from: account});
+    return adoptionInstance.buy(kbId, {from: account, value:web3.toWei(kbPrice, "ether")});
   }).then(function(result) {
-    return App.markAdopted();
+    console.log(result);
+    console.log("Purchased", kbId, kbPrice);
+    return App.showListings();
   }).catch(function(err) {
     console.log(err.message);
   });
 });
   }
-
 };
 
 $(function() {
