@@ -77,7 +77,7 @@ web3 = new Web3(App.web3Provider);
 
       for (i = 0; i < count; i++) {
         adoptionInstance.get.call(i).then(function(keyboard) {
-          console.log(keyboard)
+          console.log(keyboard);
           
         const id = keyboard[0].c[0];
         const name = keyboard[1];
@@ -95,10 +95,10 @@ web3 = new Web3(App.web3Provider);
         petTemplate.find('.btn-adopt').attr('data-price', price);
         petTemplate.find('.uploader').text(uploader);
         petTemplate.find('.owner').text(owner);
-
-        if (owner !== '0x0000000000000000000000000000000000000000') {
-          petTemplate.find('.btn-adopt').attr('disabled', true);
-        }else petTemplate.find('.btn-adopt').attr('data-id', id);
+        
+        if(owner !== '0x0000000000000000000000000000000000000000'){
+          petTemplate.find('.btn-adopt').text('Unavailable').attr('disabled', true);
+        } else petTemplate.find('.btn-adopt').text('Buy').attr('data-id', id).attr('disabled', false);
 
         petsRow.append(petTemplate.html());
           
@@ -138,7 +138,7 @@ web3.eth.getAccounts(function(error, accounts) {
   }).then(function(result) {
     console.log(result);
     console.log("Purchased", kbId, kbPrice);
-    return App.showListings();
+    location.reload();
   }).catch(function(err) {
     console.log(err.message);
   });

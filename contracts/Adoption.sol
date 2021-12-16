@@ -48,6 +48,15 @@ function buy(uint id) public payable{
 }
 }
 
+function getOwners() public view returns(address[] memory){
+  address[] memory arrayOfOwners;
+
+  for(uint i = 0; i < keyboards.length; i++){
+    arrayOfOwners[i] = keyboards[i].owner;
+  } 
+  return(arrayOfOwners);
+}
+
 function getKeyboardsAmount() public view returns (uint256 length){
   return keyboards.length;
 }
