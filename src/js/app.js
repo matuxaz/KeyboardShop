@@ -59,6 +59,7 @@ web3 = new Web3(App.web3Provider);
   //binding the buy button to the handler function
   bindEvents: function() {
     $(document).on('click', '.btn-adopt', App.handleBuy);
+    $(document).on('click', '.btn-delete', App.handleDelete);
     $(document).on('click', '#btn-add-keyboard', App.handleCreate);
   },
 
@@ -94,41 +95,42 @@ web3 = new Web3(App.web3Provider);
 
         const currentUser = App.web3Provider.selectedAddress;
 
-        petTemplate.find('.panel-title').text(name);
-        petTemplate.find('.switches').text(switches);
-        petTemplate.find('.id').text(id);
-        petTemplate.find('.price').text(price);
-        petTemplate.find('.btn-adopt').attr('data-price', price);
-        petTemplate.find('.uploader').text(uploader);
-        petTemplate.find('.owner').text(owner);
-
-        //checking if image exists
-        var http = new XMLHttpRequest();
-        http.open('HEAD', picture, false);
-        http.send();
-        if (http.status != 404)
-          petTemplate.find('img').attr('src', picture);
-        else
-          petTemplate.find('img').attr('src', 'images/notUploaded.png');
-        
-        if(owner !== '0x0000000000000000000000000000000000000000'){
-          petTemplate.find('.btn-adopt').text('Unavailable').attr('disabled', true);
-        } else petTemplate.find('.btn-adopt').text('Buy').attr('data-id', id).attr('disabled', false);
-        console.log(currentUser);
-        console.log(owner);
-
-        //populating the userPage
-        if (owner === currentUser) {
-        userTemplate.find('.user-panel-title').text(name);
-        userTemplate.find('.user-switches').text(switches);
-        userTemplate.find('.user-id').text(id);
-        userTemplate.find('.user-price').text(id);
-        userTemplate.find('.user-uploader').text(uploader);
-
-        userRow.append(userTemplate.html());
+        if(uploader !== '0x0000000000000000000000000000000000000000'){
+          petTemplate.find('.panel-title').text(name);
+          petTemplate.find('.switches').text(switches);
+          petTemplate.find('.id').text(id);
+          petTemplate.find('.price').text(price);
+          petTemplate.find('.btn-adopt').attr('data-price', price);
+          petTemplate.find('.uploader').text(uploader);
+          petTemplate.find('.owner').text(owner);
+  
+          //checking if image exists
+          var http = new XMLHttpRequest();
+          http.open('HEAD', picture, false);
+          http.send();
+          if (http.status != 404)
+            petTemplate.find('img').attr('src', picture);
+          else
+            petTemplate.find('img').attr('src', 'images/notUploaded.png');
+          
+          if(owner !== '0x0000000000000000000000000000000000000000'){
+            petTemplate.find('.btn-adopt').text('Unavailable').attr('disabled', true);
+          } else petTemplate.find('.btn-adopt').text('Buy').attr('data-id', id).attr('disabled', false);
+  
+          //populating the userPage
+          if (owner === currentUser) {
+          userTemplate.find('.user-panel-title').text(name);
+          userTemplate.find('.user-switches').text(switches);
+          userTemplate.find('.user-id').text(id);
+          userTemplate.find('.user-price').text(id);
+          userTemplate.find('.user-uploader').text(uploader);
+          userTemplate.find('.btn-delete').attr('data-id', id);
+  
+          userRow.append(userTemplate.html());
+          }
+  
+          petsRow.append(petTemplate.html());
         }
-
-        petsRow.append(petTemplate.html());
           
         }).catch(function(err) {
           console.log(err.message);
@@ -142,6 +144,7 @@ web3 = new Web3(App.web3Provider);
 
   handleCreate: function(event){
     event.preventDefault();
+
     console.log("Creating new keyboard");
     var name = $('#name').val();
     var switches = $('#switches').val();
@@ -161,14 +164,39 @@ web3 = new Web3(App.web3Provider);
         adoptionInstance = instance;
 
         return adoptionInstance.add(name, picture, switches, price, {from: account});
+
       }).then(function(result) {
-        console.log(result);
         console.log("Keyboard added");
         location.reload();
-        console.log(name);
-        console.log(switches);
-        console.log(price);
-        console.log(picture);
+
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  handleDelete: function(event){
+    event.preventDefault();
+    var kbId = parseInt($(event.target).data('id'));
+
+    var adoptionInstance;
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      console.log(account);
+
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
+
+        return adoptionInstance.deleteKeyboard(kbId, {from: account});
+
+      }).then(function(result) {
+        console.log("keyboard deleted with id:", kbId);
+        location.reload();
+
       }).catch(function(err) {
         console.log(err.message);
       });

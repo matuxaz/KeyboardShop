@@ -52,6 +52,15 @@ function buy(uint id) public payable{
 }
 }
 
+function deleteKeyboard(uint id) public{
+  for(uint i = 0; i < keyboards.length; i++){
+    if(keyboards[i].owner == msg.sender && keyboards[i].id == id){
+      delete keyboards[i];
+      return;
+    }
+  }
+}
+
 function getOwners() public view returns(address[] memory){
   address[] memory arrayOfOwners;
 
