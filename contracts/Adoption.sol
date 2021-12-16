@@ -23,6 +23,8 @@ constructor(){
 }
 
 function add(string memory name, string memory picture, string memory switches, uint price) public{
+  if(keccak256(bytes(name)) == keccak256(bytes(""))){name = "no name";}
+
   if(keccak256(bytes(picture)) == keccak256(bytes(""))){
     keyboards.push(Item(keyboardId, name, "images/notUploaded.png", switches, price, msg.sender, address(0)));
   }else{
@@ -56,6 +58,19 @@ function deleteKeyboard(uint id) public{
   for(uint i = 0; i < keyboards.length; i++){
     if(keyboards[i].owner == msg.sender && keyboards[i].id == id){
       delete keyboards[i];
+      return;
+    }
+  }
+}
+
+function editKeyboard(uint id, string memory name, string memory switches, uint price, string memory picture) public{
+  for(uint i = 0; i < keyboards.length; i++){
+    if(keyboards[i].owner == msg.sender && keyboards[i].id == id){
+      if(keccak256(bytes(name)) != keccak256(bytes(""))){keyboards[i].name = name;}
+      if(keccak256(bytes(switches)) != keccak256(bytes(""))){keyboards[i].switches = switches;}
+      if(price != 0){keyboards[i].price = price;}
+      if(keccak256(bytes(picture)) != keccak256(bytes(""))){keyboards[i].picture = picture;}
+      
       return;
     }
   }

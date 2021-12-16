@@ -61,6 +61,7 @@ web3 = new Web3(App.web3Provider);
     $(document).on('click', '.btn-adopt', App.handleBuy);
     $(document).on('click', '.btn-delete', App.handleDelete);
     $(document).on('click', '.btn-edit', App.handleEdit);
+    $(document).on('click', '.btn-sell', App.handleSell);
     $(document).on('click', '#btn-add-keyboard', App.handleCreate);
   },
 
@@ -104,15 +105,7 @@ web3 = new Web3(App.web3Provider);
           petTemplate.find('.btn-adopt').attr('data-price', price);
           petTemplate.find('.uploader').text(uploader);
           petTemplate.find('.owner').text(owner);
-  
-          //checking if image exists
-          var http = new XMLHttpRequest();
-          http.open('HEAD', picture, false);
-          http.send();
-          if (http.status != 404)
-            petTemplate.find('img').attr('src', picture);
-          else
-            petTemplate.find('img').attr('src', 'images/notUploaded.png');
+          petTemplate.find('img').attr('src', picture);
           
           if(owner !== '0x0000000000000000000000000000000000000000' || uploader == currentUser){
             petTemplate.find('.btn-adopt').text('Unavailable').attr('disabled', true);
@@ -123,10 +116,11 @@ web3 = new Web3(App.web3Provider);
           userTemplate.find('.user-panel-title').text(name);
           userTemplate.find('.user-switches').text(switches);
           userTemplate.find('.user-id').text(id);
-          userTemplate.find('.user-price').text(id);
+          userTemplate.find('.user-price').text(price);
           userTemplate.find('.user-uploader').text(uploader);
           userTemplate.find('.btn-delete').attr('data-id', id);
           userTemplate.find('.btn-edit').attr('data-id', id);
+          userTemplate.find('.btn-sell').attr('data-id', id);
   
           userRow.append(userTemplate.html());
           }
@@ -181,6 +175,39 @@ web3 = new Web3(App.web3Provider);
     event.preventDefault();
     var kbId = parseInt($(event.target).data('id'));
     console.log("Trying to change values for", kbId);
+
+    var name = $('#new-name').val();
+    var switches = $('#new-switches').val();
+    var price = $('#new-price').val();
+    var picture = $('#new-picture').val();
+
+    console.log(name);
+    console.log(switches);
+    console.log(price);
+    console.log(picture);
+
+    var adoptionInstance;
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      console.log(account);
+
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
+
+        return adoptionInstance.editKeyboard(kbId, name, switches, price, picture, {from: account});
+
+      }).then(function(result) {
+        console.log("Keyboard added");
+        location.reload();
+
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
 
   },
 
