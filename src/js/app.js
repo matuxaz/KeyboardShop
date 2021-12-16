@@ -60,7 +60,6 @@ web3 = new Web3(App.web3Provider);
   bindEvents: function() {
     $(document).on('click', '.btn-adopt', App.handleBuy);
     $(document).on('click', '#btn-add-keyboard', App.handleCreate);
-    $(document).on('click', '.btn-delete', App.handleDelete);
   },
 
   showListings: function() {
@@ -115,6 +114,8 @@ web3 = new Web3(App.web3Provider);
         if(owner !== '0x0000000000000000000000000000000000000000'){
           petTemplate.find('.btn-adopt').text('Unavailable').attr('disabled', true);
         } else petTemplate.find('.btn-adopt').text('Buy').attr('data-id', id).attr('disabled', false);
+        console.log(currentUser);
+        console.log(owner);
 
         //populating the userPage
         if (owner === currentUser) {
@@ -123,7 +124,6 @@ web3 = new Web3(App.web3Provider);
         userTemplate.find('.user-id').text(id);
         userTemplate.find('.user-price').text(id);
         userTemplate.find('.user-uploader').text(uploader);
-        petTemplate.find('.btn-delete').attr('data-id', id);
 
         userRow.append(userTemplate.html());
         }
@@ -175,16 +175,10 @@ web3 = new Web3(App.web3Provider);
     });
   },
 
-  handleDelete: function(event){
-
-    var kbId = parseInt($(event.target).data('id'));
-    console.log("deleting item with id:", kbId)
-  },
-
-  handleBuy: function(event){
+  handleBuy: function(event) {
     event.preventDefault();
 
-    var kbId = parseInt($(event.target).data('uid'));
+    var kbId = parseInt($(event.target).data('id'));
     var kbPrice = parseInt($(event.target).data('price'));
     console.log("buying keyboard with id and price: " + kbId + ", " + kbPrice);
 
