@@ -3,25 +3,7 @@ App = {
   contracts: {},
 
   init: async function() {
-
-    // Load pets.
-    $.getJSON('../keyboards.json', function(data) {
-      var petsRow = $('#petsRow');
-      var petTemplate = $('#petTemplate');
-
-      for (i = 0; i < data.length; i ++) {
-        petTemplate.find('.panel-title').text(data[i].name);
-        petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.switches').text(data[i].switches);
-        petTemplate.find('.keycaps').text(data[i].keycaps);
-        petTemplate.find('.ffactor').text(data[i].ffactor);
-        petTemplate.find('.id').text(data[i].id);
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
-
-        petsRow.append(petTemplate.html());
-      }
-    });
-
+    console.log("running init")
     return await App.initWeb3();
   },
 
@@ -46,7 +28,7 @@ else {
   App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
 }
 web3 = new Web3(App.web3Provider);
-
+    console.log("running init contract");
     return App.initContract();
   },
 
@@ -63,11 +45,12 @@ web3 = new Web3(App.web3Provider);
       web3.eth.getCoinbase(function(err, account) {
         if (err === null) {
           App.account = account;
+          console.log("account connected:"+ account);
           $("#account").text(account);
         }
       })
       // Use our contract to retrieve and mark the adopted pets
-      return App.markAdopted();
+      return App.showListings();
     });
 
     return App.bindEvents();
@@ -78,25 +61,57 @@ web3 = new Web3(App.web3Provider);
     $(document).on('click', '.btn-adopt', App.handleAdopt);
   },
 
-  //making the buy buttons unclickable for already bought items
-  markAdopted: function() {
+  showListings: function() {
+    console.log("showing listings");
     var adoptionInstance;
 
-App.contracts.Adoption.deployed().then(function(instance) {
-  adoptionInstance = instance;
+    App.contracts.Adoption.deployed().then(function(instance) {
+      adoptionInstance = instance;
 
-  return adoptionInstance.getAdopters.call();
-}).then(function(owners) {
-  for (i = 0; i < owners.length; i++) {
-    if (owners[i] !== '0x0000000000000000000000000000000000000000') {
-      $('.panel-pet').eq(i).find('button').text('Unavailable').attr('disabled', true);
-      $(document).find('.owner').eq(i).text(`${owners[i]}`);
-    }
-  }
-}).catch(function(err) {
-  console.log(err.message);
-});
+      return adoptionInstance.getKeyboardsAmount.call();
+    }).then(function(keyboards) {
+      count = keyboards.c[0]
+
+      var petsRow = $('#petsRow');
+    var petTemplate = $('#petTemplate');
+
+      for (i = 0; i < count; i++) {
+        adoptionInstance.get.call(i).then(function(keyboard) {
+          console.log(keyboard)
+          
+        const id = keyboard[0].c[0];
+        const name = keyboard[1];
+        const picture = keyboard[2];
+        const switches = keyboard[3];
+        const price = keyboard[4].c[0];
+        const uploader = keyboard[5];
+        const owner = keyboard[6];
+
+        petTemplate.find('.panel-title').text(name);
+        petTemplate.find('img').attr('src', picture);
+        petTemplate.find('.switches').text(switches);
+        petTemplate.find('.id').text(id);
+        petTemplate.find('.price').text(price);
+        petTemplate.find('.uploader').text(uploader);
+        petTemplate.find('.owner').text(owner);
+
+        if (owner !== '0x0000000000000000000000000000000000000000') {
+          petTemplate.find('.btn-adopt').attr('disabled', true);
+        }else petTemplate.find('.btn-adopt').attr('data-id', id);
+
+        petsRow.append(petTemplate.html());
+          
+        }).catch(function(err) {
+          console.log(err.message);
+        });
+      }
+      console.log("Keyboards loaded successfully.");
+    }).catch(function(err) {
+      console.log(err.message);
+    });
   },
+
+  //making the buy buttons unclickable for already bought items
 
   handleAdopt: function(event) {
     event.preventDefault();
@@ -116,7 +131,7 @@ web3.eth.getAccounts(function(error, accounts) {
     adoptionInstance = instance;
 
     // Execute adopt as a transaction by sending account
-    return adoptionInstance.adopt(petId, {from: account});
+    return adoptionInstance.buy(petId, {from: account});
   }).then(function(result) {
     return App.markAdopted();
   }).catch(function(err) {
