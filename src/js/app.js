@@ -113,23 +113,6 @@ web3 = new Web3(App.web3Provider);
   },
 
   //making the buy buttons unclickable for already bought items
-  markUnavailable: function() {
-    var adoptionInstance;
-
-App.contracts.Adoption.deployed().then(function(instance) {
-  adoptionInstance = instance;
-
-  return adoptionInstance.getOwners.call();
-}).then(function(owners) {
-  for (i = 0; i < owners.length; i++) {
-    if (owners[i] !== '0x0000000000000000000000000000000000000000') {
-      $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
-    }
-  }
-}).catch(function(err) {
-  console.log(err.message);
-});
-  },
 
   handleBuy: function(event) {
     event.preventDefault();
