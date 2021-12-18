@@ -21,7 +21,7 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-sm-push-2">
-          <h1 class="text-center">BlockChain Keyboard Shop
+          <h1 class="text-center">Selected keyboard info
             <div>
               <button class="btn btn-success ml-auto mr-1 account-button" onclick="window.location.href='userPage.html'">Account: <span class="nav-link" id="account"></span></button>
               <button onclick="window.location.href='userPage.html'" class="btn ml-auto mr-1 account-button">Back to profile <span class="nav-link" id="move"></span></button>
@@ -34,31 +34,17 @@
         </div>
       </div>
 
-      <div id="petsRow" class="row">
-        <!-- PETS LOAD HERE -->
-      </div>
-    </div>
+            <div>
+                <strong>Name</strong>: <span id="sName" class="single-name">No name</span><br/>
+                <strong>ID</strong>: <span id="sId" class="single-id">0</span><br/>
+                <strong>Switches</strong>: <span id="sSwitches" class="single-switches">None</span><br/>
+                <strong>Price</strong>: <span id="sPrice" class="single-price">0</span><br/>
+                <strong>Picture Link:</strong>: <span id="sPicture" class="single-picture">images/notUploaded.png</span><br/>
+                <strong>Uploaded by:</strong>: <span id="sUploader" class="single-uploader">0x0000000000000000000000000000000000000000</span><br/>
+                <strong>Owned by</strong>: <span id="sOwner" class="single-owner">0x0000000000000000000000000000000000000000</span><br/>
+            </div>
 
-    <div id="petTemplate" style="display: none;">
-      <div class="col-sm-6 col-md-5 col-lg-4">
-        <div class="panel panel-default panel-pet">
-          <div class="panel-heading">
-            <h3 class="panel-title">No name</h3>
-          </div>
-          <div class="panel-body">
-            <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" height="240" src="https://animalso.com/wp-content/uploads/2017/01/Golden-Retriever_6.jpg" data-holder-rendered="true">
-            <br/><br/>
-            <strong>Switches</strong>: <span class="switches">3</span><br/>
-            <strong>ID</strong>: <span class="id">0</span><br/>
-            <strong>Price</strong>: <span class="price">3</span><br/>
-            <strong>Uploaded by:</strong>: <span class="uploader">0x0000000000000000000000000000000000000000</span><br/>
-            <strong>Owned by</strong>: <span class="owner">0x0000000000000000000000000000000000000000</span><br/>
-          
-            <button class="btn btn-default btn-adopt" type="button" data-id="0" data-price = "134">Buy</button>
-          </div>
-        </div>
-      </div>
-    </div>
+        
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

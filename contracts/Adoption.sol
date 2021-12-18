@@ -22,6 +22,7 @@ constructor(){
   add("Halo","","Gateron Yellow", 5);
 }
 
+//adding a keyboard to the list of keyboards
 function add(string memory name, string memory picture, string memory switches, uint price) public{
   if(keccak256(bytes(name)) == keccak256(bytes(""))){name = "no name";}
 
@@ -33,6 +34,7 @@ function add(string memory name, string memory picture, string memory switches, 
   keyboardId++;
 }
 
+//getting a keyboard by id
 function get(uint id) public view returns (uint thisKeyboardId, string memory name, string memory picture, string memory switches, uint price, address uploader, address owner){
     for(uint i = 0; i < keyboards.length; i++){
       if(keyboards[i].id == id){
@@ -54,6 +56,7 @@ function buy(uint id) public payable{
 }
 }
 
+//deleting an owned keyboard
 function deleteKeyboard(uint id) public{
   for(uint i = 0; i < keyboards.length; i++){
     if(keyboards[i].owner == msg.sender && keyboards[i].id == id){
@@ -63,6 +66,7 @@ function deleteKeyboard(uint id) public{
   }
 }
 
+//selling an owned keyboard
 function sellKeyboard(uint id) public{
   for(uint i = 0; i < keyboards.length; i++){
     if(keyboards[i].owner == msg.sender && keyboards[i].id == id){
@@ -73,6 +77,7 @@ function sellKeyboard(uint id) public{
   }
 }
 
+//editing a keyboard (able to edit even if not all of the values are given)
 function editKeyboard(uint id, string memory name, string memory switches, uint price, string memory picture) public{
   for(uint i = 0; i < keyboards.length; i++){
     if(keyboards[i].owner == msg.sender && keyboards[i].id == id){

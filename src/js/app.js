@@ -216,6 +216,9 @@ web3 = new Web3(App.web3Provider);
   handleView: function(event){
     event.preventDefault();
     var kbId = parseInt($(event.target).data('id'));
+
+    var singlePanel = $('#singlePanel');
+
     console.log(kbId);
 
     var adoptionInstance;
@@ -238,19 +241,13 @@ web3 = new Web3(App.web3Provider);
         const price = keyboard[4].c[0];
         const uploader = keyboard[5];
         const owner = keyboard[6];
-        
-        console.log(name);
-        console.log(picture);
-        console.log(switches);
-        console.log(price);
-        console.log(uploader);
-        console.log(owner);
+
 
       }).catch(function(err) {
         console.log(err.message);
       });
     });
-
+    
   },
 
   handleDelete: function(event){
