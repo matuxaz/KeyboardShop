@@ -63,6 +63,7 @@ web3 = new Web3(App.web3Provider);
     $(document).on('click', '.btn-edit', App.handleEdit);
     $(document).on('click', '.btn-sell', App.handleSell);
     $(document).on('click', '#btn-add-keyboard', App.handleCreate);
+    $(document).on('click', '.btn-view', App.handleView);
   },
 
   showListings: function() {
@@ -121,6 +122,7 @@ web3 = new Web3(App.web3Provider);
           userTemplate.find('.btn-delete').attr('data-id', id);
           userTemplate.find('.btn-edit').attr('data-id', id);
           userTemplate.find('.btn-sell').attr('data-id', id);
+          userTemplate.find('.btn-view').attr('data-id', id);
   
           userRow.append(userTemplate.html());
           }
@@ -203,6 +205,46 @@ web3 = new Web3(App.web3Provider);
       }).then(function(result) {
         console.log("Keyboard data edited");
         location.reload();
+
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+
+  },
+
+  handleView: function(event){
+    event.preventDefault();
+    var kbId = parseInt($(event.target).data('id'));
+    console.log(kbId);
+
+    var adoptionInstance;
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
+
+        return adoptionInstance.get(kbId, {from: account});
+
+      }).then(function(keyboard) {
+        console.log("Single keyboard data recieved");
+        const name = keyboard[1];
+        const picture = keyboard[2];
+        const switches = keyboard[3];
+        const price = keyboard[4].c[0];
+        const uploader = keyboard[5];
+        const owner = keyboard[6];
+        
+        console.log(name);
+        console.log(picture);
+        console.log(switches);
+        console.log(price);
+        console.log(uploader);
+        console.log(owner);
 
       }).catch(function(err) {
         console.log(err.message);
