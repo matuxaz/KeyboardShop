@@ -63,7 +63,6 @@ web3 = new Web3(App.web3Provider);
     $(document).on('click', '.btn-edit', App.handleEdit);
     $(document).on('click', '.btn-sell', App.handleSell);
     $(document).on('click', '#btn-add-keyboard', App.handleCreate);
-    $(document).on('click', '.btn-view', App.handleView);
   },
 
   showListings: function() {
@@ -95,19 +94,20 @@ web3 = new Web3(App.web3Provider);
         const price = keyboard[4].c[0];
         const uploader = keyboard[5];
         const owner = keyboard[6];
-
         const currentUser = App.web3Provider.selectedAddress;
 
+        //populating the main page
         if(uploader !== '0x0000000000000000000000000000000000000000'){
           petTemplate.find('.panel-title').text(name);
           petTemplate.find('.switches').text(switches);
-          petTemplate.find('.id').text(id);
+          //petTemplate.find('.id').text(id);
           petTemplate.find('.price').text(price);
           petTemplate.find('.btn-adopt').attr('data-price', price);
           petTemplate.find('.uploader').text(uploader);
           petTemplate.find('.owner').text(owner);
           petTemplate.find('img').attr('src', picture);
           
+          //making the button unclickable if it's unavailable
           if(owner !== '0x0000000000000000000000000000000000000000' || uploader == currentUser){
             petTemplate.find('.btn-adopt').text('Unavailable').attr('disabled', true);
           } else petTemplate.find('.btn-adopt').text('Buy').attr('data-id', id).attr('disabled', false);
@@ -118,7 +118,9 @@ web3 = new Web3(App.web3Provider);
           userTemplate.find('.user-switches').text(switches);
           userTemplate.find('.user-id').text(id);
           userTemplate.find('.user-price').text(price);
+          userTemplate.find('.user-picture').text(picture);
           userTemplate.find('.user-uploader').text(uploader);
+          userTemplate.find('.user-owner').text(owner);
           userTemplate.find('.btn-delete').attr('data-id', id);
           userTemplate.find('.btn-edit').attr('data-id', id);
           userTemplate.find('.btn-sell').attr('data-id', id);
@@ -211,43 +213,6 @@ web3 = new Web3(App.web3Provider);
       });
     });
 
-  },
-
-  handleView: function(event){
-    event.preventDefault();
-    var kbId = parseInt($(event.target).data('id'));
-
-    var singlePanel = $('#singlePanel');
-
-    console.log(kbId);
-
-    var adoptionInstance;
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-      App.contracts.Adoption.deployed().then(function(instance) {
-        adoptionInstance = instance;
-
-        return adoptionInstance.get(kbId, {from: account});
-
-      }).then(function(keyboard) {
-        console.log("Single keyboard data recieved");
-        const name = keyboard[1];
-        const picture = keyboard[2];
-        const switches = keyboard[3];
-        const price = keyboard[4].c[0];
-        const uploader = keyboard[5];
-        const owner = keyboard[6];
-
-
-      }).catch(function(err) {
-        console.log(err.message);
-      });
-    });
-    
   },
 
   handleDelete: function(event){
